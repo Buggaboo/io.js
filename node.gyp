@@ -70,6 +70,7 @@
       'lib/vm.js',
       'lib/zlib.js',
     ],
+    'java_home%': '<!(python -c "import os; dir=os.getenv(\'JAVA_HOME\', \'/usr/lib/jvm/java-7-openjdk-amd64\'); assert os.path.exists(os.path.join(dir, \'include/jni.h\')), \'Point \\$JAVA_HOME or the java_home gyp variable to a directory containing include/jni.h!\'; print dir")',
   },
 
   'targets': [
@@ -87,6 +88,7 @@
         'tools/msvs/genfiles',
         'deps/uv/src/ares',
         '<(SHARED_INTERMEDIATE_DIR)' # for node_natives.h
+        , '<(java_home)/include'
       ],
 
       'sources': [
