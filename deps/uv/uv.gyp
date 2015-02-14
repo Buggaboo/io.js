@@ -213,7 +213,11 @@
             'src/unix/linux-syscalls.c',
             'src/unix/linux-syscalls.h',
             'src/unix/pthread-fixes.c',
-            'src/unix/android-ifaddrs.c'
+            'src/unix/android-ifaddrs.c',
+            'include/cutils/sockets.h',
+            'include/cutils/socket_local.h',
+            'src/unix/cutils/socket_local_client.c',
+            'src/unix/cutils/socket_local_server.c',
           ],
           'link_settings': {
             'libraries': [ '-ldl' ],
