@@ -76,7 +76,7 @@
   'targets': [
     {
       'target_name': 'iojs',
-      'type': 'executable',
+      'type': 'shared_library',
 
       'dependencies': [
         'node_js2c#host',
@@ -104,7 +104,7 @@
         'src/node_file.cc',
         'src/node_http_parser.cc',
         'src/node_javascript.cc',
-        'src/node_main.cc',
+#        'src/node_main.cc',
         'src/node_os.cc',
         'src/node_v8.cc',
         'src/node_v8_platform.cc',
@@ -158,6 +158,9 @@
         'src/util.h',
         'src/util-inl.h',
         'src/util.cc',
+        'src/android_log.h',
+        'src/node_jni.h',
+        'src/node_jni.cc',
         'deps/http_parser/http_parser.h',
         '<(SHARED_INTERMEDIATE_DIR)/node_natives.h',
         # javascript files to make for an even more pleasant IDE experience

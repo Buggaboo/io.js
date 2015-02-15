@@ -40,6 +40,10 @@
 #include "v8.h"  // NOLINT(build/include_order)
 #include "node_version.h"  // NODE_MODULE_VERSION
 
+#if defined(__ANDROID__)
+#include "android_log.h"
+#endif
+
 #define NODE_DEPRECATED(msg, fn) V8_DEPRECATED(msg, fn)
 
 // Forward-declare libuv loop
