@@ -52,18 +52,22 @@ int uv_pipe_bind(uv_pipe_t* handle, const char* name) {
   /* Already bound? */
   if (uv__stream_fd(handle) >= 0)
     return -EINVAL;
+
+  /* Make a copy of the file name, it outlives this function's scope. */
+  pipe_fname = strdup(name);
+  if (pipe_fname == NULL)
+    return -ENOMEM;
+  
 #if defined(__ANDROID__)
   err = uv__socket(AF_UNIX, SOCK_STREAM, 0);
   if (err < 0)
     goto err_socket;
   sockfd = err;
-  socket_local_server_bind(sockfd, ANDROID_SOCKET_NAMESPACE_FILESYSTEM, name);
+  
+  int abstractOrFs = (name[0] == '/') ? ANDROID_SOCKET_NAMESPACE_FILESYSTEM : ANDROID_SOCKET_NAMESPACE_FILESYSTEM;
+  socket_local_server_bind(sockfd, abstractOrFs, name);
   /* happy flow is return 0, so proceed */
 #else
-  /* Make a copy of the file name, it outlives this function's scope. */
-  pipe_fname = strdup(name);
-  if (pipe_fname == NULL)
-    return -ENOMEM;
 
   /* We've got a copy, don't touch the original any more. */
   name = NULL;
@@ -168,7 +172,8 @@ void uv_pipe_connect(uv_connect_t* req,
     handle->io_watcher.fd = err;
   }
 #if defined(__ANDROID__)
-  r = socket_local_client_connect(err, name, ANDROID_SOCKET_NAMESPACE_FILESYSTEM, NULL);
+  int abstractOrFs = (name[0] == '/') ? ANDROID_SOCKET_NAMESPACE_FILESYSTEM : ANDROID_SOCKET_NAMESPACE_FILESYSTEM;
+  r = socket_local_client_connect(err, name, abstractOrFs, NULL);
 #else
   memset(&saddr, 0, sizeof saddr);
   strncpy(saddr.sun_path, name, sizeof(saddr.sun_path) - 1);

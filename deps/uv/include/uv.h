@@ -62,9 +62,10 @@ extern "C" {
 #endif
 
 #if defined(__ANDROID__)
+/* force support for abstract domain socket */
+#define HAVE_LINUX_LOCAL_SOCKET_NAMESPACE 1
 #include <cutils/sockets.h>
 #endif
-
 
 /* Expand this list if necessary. */
 #define UV_ERRNO_MAP(XX)                                                      \
