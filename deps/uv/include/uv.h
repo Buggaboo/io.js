@@ -63,6 +63,7 @@ extern "C" {
 
 #if defined(__ANDROID__)
 #include <cutils/sockets.h>
+#define __linux__ 1
 #endif
 
 
