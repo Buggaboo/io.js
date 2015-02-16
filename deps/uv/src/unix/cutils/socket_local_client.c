@@ -39,6 +39,7 @@ int socket_local_client(const char *name, int namespaceId, int type)
 
 /*#include "socket_local.h"*/
 #include <cutils/socket_local.h>
+#include "android_log.h" // logging
 
 #define UNUSED __attribute__((unused))
 
@@ -132,6 +133,7 @@ int socket_local_client_connect(int fd, const char *name, int namespaceId,
     int err;
 
     err = socket_make_sockaddr_un(name, namespaceId, &addr, &alen);
+    LOGD("uv_pipe_connect::fd:%d, saddr.sun_path:%s, sizeof saddr:%d", err, addr.sun_path, alen);
 
     if (err < 0) {
         goto error;

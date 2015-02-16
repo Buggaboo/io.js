@@ -62,10 +62,16 @@ extern "C" {
 #endif
 
 #if defined(__ANDROID__)
+#ifdef LOG_TAG
+#  undef LOG_TAG
+#  define LOG_TAG "android/uv"
+#endif /* LOG_TAG */
+
+#include "android_log.h"
 /* force support for abstract domain socket */
 #define HAVE_LINUX_LOCAL_SOCKET_NAMESPACE 1
 #include <cutils/sockets.h>
-#endif
+#endif /* __ANDROID__ */
 
 /* Expand this list if necessary. */
 #define UV_ERRNO_MAP(XX)                                                      \

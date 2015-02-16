@@ -57,17 +57,6 @@ int uv_pipe_bind(uv_pipe_t* handle, const char* name) {
   pipe_fname = strdup(name);
   if (pipe_fname == NULL)
     return -ENOMEM;
-  
-#if defined(__ANDROID__)
-  err = uv__socket(AF_UNIX, SOCK_STREAM, 0);
-  if (err < 0)
-    goto err_socket;
-  sockfd = err;
-  
-  int abstractOrFs = (name[0] == '/') ? ANDROID_SOCKET_NAMESPACE_FILESYSTEM : ANDROID_SOCKET_NAMESPACE_FILESYSTEM;
-  socket_local_server_bind(sockfd, abstractOrFs, name);
-  /* happy flow is return 0, so proceed */
-#else
 
   /* We've got a copy, don't touch the original any more. */
   name = NULL;
@@ -77,19 +66,31 @@ int uv_pipe_bind(uv_pipe_t* handle, const char* name) {
     goto err_socket;
   sockfd = err;
 
+#if defined(__ANDROID__)
+  /* force compatibility with android.net.Local{,Server}Socket
+  /* function signature: int socket_make_sockaddr_un(const char *name, int namespaceId, 
+        struct sockaddr_un *p_addr, socklen_t *alen); */
+  int namespace = (pipe_fname[0] == '/') ? ANDROID_SOCKET_NAMESPACE_FILESYSTEM : ANDROID_SOCKET_NAMESPACE_ABSTRACT;
+  socklen_t alen;
+  socket_make_sockaddr_un(pipe_fname, namespace, &saddr, &alen);
+  LOGD("uv_pipe_bind::fd:%d, pipe_fname:%s, saddr.sun_path:%s, sizeof saddr:%d", err, pipe_fname, saddr.sun_path, alen);
+  if (bind(sockfd, (struct sockaddr*)&saddr, alen)) {    
+#else
+
   memset(&saddr, 0, sizeof saddr);
   strncpy(saddr.sun_path, pipe_fname, sizeof(saddr.sun_path) - 1);
   saddr.sun_path[sizeof(saddr.sun_path) - 1] = '\0';
-  saddr.sun_family = AF_UNIX;
-
-  if (bind(sockfd, (struct sockaddr*)&saddr, sizeof saddr)) {
+  saddr.sun_family = AF_UNIX;      
+      
+  if (bind(sockfd, (struct sockaddr*)&saddr, sizeof saddr)) {  
+#endif /* __ANDROID__ */  
     err = -errno;
     /* Convert ENOENT to EACCES for compatibility with Windows. */
     if (err == -ENOENT)
       err = -EACCES;
     goto err_bind;
   }
-#endif /* __ANDROID__ */
+
   /* Success. */
   handle->pipe_fname = pipe_fname; /* Is a strdup'ed copy. */
   handle->io_watcher.fd = sockfd;
@@ -171,22 +172,32 @@ void uv_pipe_connect(uv_connect_t* req,
       goto out;
     handle->io_watcher.fd = err;
   }
+
+  
 #if defined(__ANDROID__)
-  int abstractOrFs = (name[0] == '/') ? ANDROID_SOCKET_NAMESPACE_FILESYSTEM : ANDROID_SOCKET_NAMESPACE_FILESYSTEM;
-  r = socket_local_client_connect(err, name, abstractOrFs, NULL);
+  int namespace = (name[0] == '/') ? ANDROID_SOCKET_NAMESPACE_FILESYSTEM : ANDROID_SOCKET_NAMESPACE_ABSTRACT;
+  socklen_t alen;
+  socket_make_sockaddr_un(name, namespace, &saddr, &alen);  
+  LOGD("uv_pipe_connect::fd:%d, saddr.sun_path:%s, sizeof saddr:%d", err, saddr.sun_path, alen);  
+//  r = socket_local_client(name, namespace, NULL); // the error codes do not match
+  
+  do {
+    r = connect (uv__stream_fd(handle),
+                (struct sockaddr*)&saddr, alen);
+  }
+  while (r == -1 && errno == EINTR);
 #else
   memset(&saddr, 0, sizeof saddr);
   strncpy(saddr.sun_path, name, sizeof(saddr.sun_path) - 1);
   saddr.sun_path[sizeof(saddr.sun_path) - 1] = '\0';
   saddr.sun_family = AF_UNIX;
-
+  
   do {
     r = connect(uv__stream_fd(handle),
                 (struct sockaddr*)&saddr, sizeof saddr);
   }
   while (r == -1 && errno == EINTR);
 #endif /* __ANDROID__ */
-
   if (r == -1 && errno != EINPROGRESS) {
     err = -errno;
     goto out;
@@ -256,6 +267,11 @@ static int uv__pipe_getsockpeername(const uv_pipe_t* handle,
 
   memcpy(buffer, sa.sun_path, addrlen);
   *size = addrlen;
+  
+#if defined(__ANDROID__)
+  LOGD("uv__pipe_getsockpeername::fd:%d, addrlen:%d", err, addrlen);
+#endif /* __ANDROID__ */
+  
 
   return 0;
 }
