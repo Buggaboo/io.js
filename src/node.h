@@ -42,6 +42,8 @@
 
 #if defined(__ANDROID__)
 #include "android_log.h"
+/* TODO determine the following redirects debugging in v8 to logcat instead of stdio */
+#undef V8_ANDROID_LOG_STDOUT 
 #endif
 
 #define NODE_DEPRECATED(msg, fn) V8_DEPRECATED(msg, fn)
