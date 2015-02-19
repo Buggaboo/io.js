@@ -1,8 +1,10 @@
 #if defined(__ANDROID__)
 
-#include <node.h>
+#include "env-inl.h"
 #include <android/log.h>
+
 using namespace v8;
+using node::Environment;
 
 /**
  * [Lifesaver](http://luismreis.github.io/node-bindings-guide/docs/arguments.html)
@@ -129,12 +131,14 @@ void OS::PrintError(const char* format, ...) {
 }
 */
 
-void Init(Handle<Object> exports) {
-  NODE_SET_METHOD(exports, "__android_logcat", AndroidLogcat);
+void Initialize(Handle<Object> target,
+                Handle<Value> unused,
+                Handle<Context> context) {
+  Environment* env = Environment::GetCurrent(context);
+  env->SetMethod(target, "__android_logcat", AndroidLogcat);
 }
 
-
-NODE_MODULE_CONTEXT_AWARE_BUILTIN(android_logcat, Init) /* Declare outside the namespace */
+NODE_MODULE_CONTEXT_AWARE_BUILTIN(android_logcat, Initialize) /* Declare outside the namespace */
 
 
 #endif /* __ANDROID__ */
