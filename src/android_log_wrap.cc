@@ -3,6 +3,18 @@
 
 #if defined(__ANDROID__)
 
+/**
+ * Usage:
+ *
+ * var log = require('android.logcat');
+ * var TAG = 'somescript.js';
+ * log.d(TAG, 'something happened...');
+ * log.e(TAG, 'it was terrible...');
+ * log.w(TAG, 'may it never happen again...');
+ * log.d(TAG, 'And nevermore...');
+ *
+ */
+
 #define ALOGD(...) __android_log_print(ANDROID_LOG_DEBUG, __VA_ARGS__)
 #define ALOGE(...) __android_log_print(ANDROID_LOG_DEBUG, __VA_ARGS__)
 #define ALOGW(...) __android_log_print(ANDROID_LOG_DEBUG, __VA_ARGS__)
