@@ -55,7 +55,7 @@ void _AndroidLogcat(android_LogPriority priority, const char* tag, const char* f
 /**
  * TODO fake var orgy play with format in javascript, if possible; PhD applicants may only apply.
  */ 
-void AndroidLogcat(const FunctionCallbackInfo<Value>& args) {
+static void AndroidLogcat(const FunctionCallbackInfo<Value>& args) {
       Isolate* isolate = Isolate::GetCurrent();
       HandleScope scope(isolate);
       
@@ -135,7 +135,7 @@ void Initialize(Handle<Object> target,
                 Handle<Value> unused,
                 Handle<Context> context) {
   Environment* env = Environment::GetCurrent(context);
-  env->SetMethod(target, "__android_logcat", AndroidLogcat);
+  NODE_SET_METHOD(target, "android_logcat", AndroidLogcat);
 }
 
 NODE_MODULE_CONTEXT_AWARE_BUILTIN(android_logcat, Initialize) /* Declare outside the namespace */
