@@ -70,7 +70,7 @@
       'lib/v8.js',
       'lib/vm.js',
       'lib/zlib.js',
-      'lib/android_logcat.js',
+      'lib/android.js',
     ]},
   'targets': [
     {
@@ -163,7 +163,7 @@
         '<@(library_files)',
         # node.gyp is added to the project by default.
         'common.gypi',
-        'src/android_logcat_wrap.cc' # TODO deps problem
+        'src/android_wrap.cc' # TODO deps problem
       ],
 
       'defines': [
@@ -192,7 +192,7 @@
             'src/android_log.h',
             'src/node_jni.h',
             'src/node_jni.cc',
-#            'src/android_logcat_wrap.cc' # TODO deps problem
+#            'src/android_wrap.cc' # TODO deps problem
           ]
         }],
         # android end
