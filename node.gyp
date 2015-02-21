@@ -70,7 +70,7 @@
       'lib/v8.js',
       'lib/vm.js',
       'lib/zlib.js',
-      'lib/android.js',
+      'lib/android.js', # TODO do this conditionally
     ]},
   'targets': [
     {
@@ -163,7 +163,7 @@
         '<@(library_files)',
         # node.gyp is added to the project by default.
         'common.gypi',
-        'src/android_wrap.cc' # TODO deps problem
+        'src/android_wrap.cc' # TODO do this conditionally
       ],
 
       'defines': [
