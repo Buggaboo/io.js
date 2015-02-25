@@ -42,6 +42,9 @@ int socket_local_server(const char *name, int namespaceId, int type)
 /*#include "socket_local.h"*/
 #include <cutils/socket_local.h>
 
+/* logging */
+#include "android_log.h" // logging
+
 #define LISTEN_BACKLOG 4
 
 /* Only the bottom bits are really the socket type; there are flags too. */
@@ -110,6 +113,8 @@ int socket_local_server(const char *name, int namespace, int type)
         return -1;
     }
 
+    LOGD("(type & SOCK_TYPE_MASK) == SOCK_STREAM: %d", ((type & SOCK_TYPE_MASK) == SOCK_STREAM));
+    assert (type & SOCK_TYPE_MASK) == SOCK_STREAM != -1;
     if ((type & SOCK_TYPE_MASK) == SOCK_STREAM) {
         int ret;
 

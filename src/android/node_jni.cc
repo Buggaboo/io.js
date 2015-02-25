@@ -146,6 +146,19 @@ JNIEXPORT jint JNICALL Java_nl_sison_android_nodejs_repl_NodeJNI_start
     return returnValue;
 }
 
+/**
+ * 
+ * API_LEVEL 21 has more low level control, whereas all implementations <= 21
+ * have netlink default as an underlying implementation underneath LocalSocket{,Server}.
+ * 
+ * Since LocalSocketServer doesn't readily expose bind and the function params,
+ * it's very very very difficult to guarantee non-fragmentation of
+ * and enforce the filesystem namespace and socket stream
+ * implementation across the versions.
+ * 
+ * So, I reused the API_LEVEL 21 implementation by borrowing cutils.
+ * 
+ */
 JNIEXPORT jint JNICALL Java_nl_sison_android_nodejs_repl_NodeJNI_createLocalSocket
 (JNIEnv *env, jclass clazz, jstring jname)
 {
