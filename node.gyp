@@ -163,7 +163,7 @@
         '<@(library_files)',
         # node.gyp is added to the project by default.
         'common.gypi',
-        'src/android_wrap.cc' # TODO do this conditionally
+        'src/android/android_wrap.cc' # TODO do this conditionally, also see `android.js`, this provides logcat to nodejs
       ],
 
       'defines': [
@@ -186,12 +186,15 @@
 #            'NODE_PLATFORM="android"', # unnecessary with gcc, dunno about llvm, this breaks the compilation if turned on
 #          ],
           'include_dirs': [
-              '<(java_home)/include'
+              '<(java_home)/include',
+              'src/android',
            ],
           'sources': [
-            'src/android_log.h',
-            'src/node_jni.h',
-            'src/node_jni.cc',
+            'src/android/android_log.h',
+#            'src/android/node_jni.h', # TODO determine if include_dirs will take care of this
+            'src/android/node_jni.cc',
+            'src/android/cutils/socket_local_client.c', # also copied to libuv. TODO provide single location to include
+            'src/android/cutils/socket_local_server.c',
 #            'src/android_wrap.cc' # TODO deps problem
           ]
         }],
