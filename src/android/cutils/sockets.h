@@ -92,6 +92,7 @@ extern int socket_network_client_timeout(const char *host, int port, int type,
 extern int socket_loopback_server(int port, int type);
 */
 extern int socket_local_server(const char *name, int namespaceId, int type);
+extern int socket_local_server_without_listen(const char *name, int namespaceId, int type);
 extern int socket_local_server_bind(int s, const char *name, int namespaceId);
 extern int socket_local_client_connect(int fd, 
         const char *name, int namespaceId, int type);

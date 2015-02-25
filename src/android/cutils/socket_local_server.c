@@ -114,7 +114,7 @@ int socket_local_server(const char *name, int namespace, int type)
     }
 
     LOGD("(type & SOCK_TYPE_MASK) == SOCK_STREAM: %d", ((type & SOCK_TYPE_MASK) == SOCK_STREAM));
-    assert (type & SOCK_TYPE_MASK) == SOCK_STREAM != -1;
+//    assert ((type & SOCK_TYPE_MASK) == SOCK_STREAM) != -1;
     if ((type & SOCK_TYPE_MASK) == SOCK_STREAM) {
         int ret;
 
@@ -126,6 +126,37 @@ int socket_local_server(const char *name, int namespace, int type)
         }
     }
 
+    return s;
+}
+
+int socket_local_server_without_listen(const char *name, int namespace, int type)
+{
+    int err;
+    int s;
+    
+    s = socket(AF_LOCAL, type, 0);
+    if (s < 0) return -1;
+
+    err = socket_local_server_bind(s, name, namespace);
+
+    if (err < 0) {
+        close(s);
+        return -1;
+    }
+/*
+    LOGD("(type & SOCK_TYPE_MASK) == SOCK_STREAM: %d", ((type & SOCK_TYPE_MASK) == SOCK_STREAM));
+//    assert ((type & SOCK_TYPE_MASK) == SOCK_STREAM) != -1;
+    if ((type & SOCK_TYPE_MASK) == SOCK_STREAM) {
+        int ret;
+
+        ret = listen(s, LISTEN_BACKLOG);
+
+        if (ret < 0) {
+            close(s);
+            return -1;
+        }
+    }
+*/
     return s;
 }
 

@@ -164,13 +164,13 @@ JNIEXPORT jint JNICALL Java_nl_sison_android_nodejs_repl_NodeJNI_createLocalSock
 {
     // TODO figure out if this needs to be manually collected
     const char* name = env->GetStringUTFChars(jname, 0);
-    int localSocket = socket_local_server(name, ANDROID_SOCKET_NAMESPACE_FILESYSTEM, SOCK_STREAM);
+    
+    int localSocket = socket_local_server_without_listen(name, ANDROID_SOCKET_NAMESPACE_FILESYSTEM, SOCK_STREAM);
   
     if (-1 == localSocket)
     {
         AndroidThrowErrnoException(env, "java/io/IOException", localSocket);
     }
- 
     
     fprintf(stdout, "AF_LOCAL socket created, bound and listening: %s", name);
     
