@@ -116,7 +116,7 @@
         }, { # Not Windows i.e. POSIX
           'cflags': [
             '-g',
-            '--std=gnu99',
+            '--std=c99',
             '-pedantic',
             '-Wall',
             '-Wextra',

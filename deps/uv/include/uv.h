@@ -62,9 +62,6 @@ extern "C" {
 #endif
 
 #if defined(__ANDROID__)
-#include "android_log.h"
-
-/* force support for abstract domain socket */
 #define HAVE_LINUX_LOCAL_SOCKET_NAMESPACE 1
 #include <cutils/sockets.h>
 #endif /* __ANDROID__ */

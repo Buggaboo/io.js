@@ -1010,8 +1010,7 @@ static int uv__stream_recv_cmsg(uv_stream_t* stream, struct msghdr* msg) {
     unsigned int count;
 
     if (cmsg->cmsg_type != SCM_RIGHTS) {
-      fprintf(stderr, "ignoring non-SCM_RIGHTS ancillary data: %d\n",
-          cmsg->cmsg_type);
+      fprintf(stderr, "ignoring non-SCM_RIGHTS ancillary data: %d\n", cmsg->cmsg_type);
       continue;
     }
 
