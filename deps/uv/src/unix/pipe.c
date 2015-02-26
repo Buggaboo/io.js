@@ -73,7 +73,7 @@ int uv_pipe_bind(uv_pipe_t* handle, const char* name) {
   int namespace = (pipe_fname[0] == '/') ? ANDROID_SOCKET_NAMESPACE_FILESYSTEM : ANDROID_SOCKET_NAMESPACE_ABSTRACT;
   socklen_t alen;
   socket_make_sockaddr_un(pipe_fname, namespace, &saddr, &alen);
-  LOGD("uv_pipe_bind::fd:%d, pipe_fname:%s, saddr.sun_path:%s, sizeof saddr:%d", err, pipe_fname, saddr.sun_path, alen);
+  fprintf("uv_pipe_bind::fd:%d, pipe_fname:%s, saddr.sun_path:%s, sizeof saddr:%d", err, pipe_fname, saddr.sun_path, alen);
   if (bind(sockfd, (struct sockaddr*)&saddr, alen)) {    
 #else
 
@@ -178,7 +178,7 @@ void uv_pipe_connect(uv_connect_t* req,
   int namespace = (name[0] == '/') ? ANDROID_SOCKET_NAMESPACE_FILESYSTEM : ANDROID_SOCKET_NAMESPACE_ABSTRACT;
   socklen_t alen;
   socket_make_sockaddr_un(name, namespace, &saddr, &alen);  
-  LOGD("uv_pipe_connect::fd:%d, saddr.sun_path:%s, sizeof saddr:%d", err, saddr.sun_path, alen);  
+  fprintf("uv_pipe_connect::fd:%d, saddr.sun_path:%s, sizeof saddr:%d", err, saddr.sun_path, alen);  
 //  r = socket_local_client(name, namespace, NULL); // the error codes do not match
   
   do {
@@ -269,7 +269,7 @@ static int uv__pipe_getsockpeername(const uv_pipe_t* handle,
   *size = addrlen;
   
 #if defined(__ANDROID__)
-  LOGD("uv__pipe_getsockpeername::fd:%d, addrlen:%d", err, addrlen);
+  fprintf("uv__pipe_getsockpeername::fd:%d, addrlen:%d", err, addrlen);
 #endif /* __ANDROID__ */
   
 

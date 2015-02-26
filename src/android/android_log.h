@@ -47,8 +47,8 @@
 #define fprintf(stderr,...) __android_log_print(ANDROID_LOG_ERROR, LOGCAT_TAG, __VA_ARGS__)
 #define fprintf(stdout,...) __android_log_print(ANDROID_LOG_INFO,  LOGCAT_TAG, __VA_ARGS__)
 */
-#define fprintf(stderr,...) LOGE(__VA_ARGS__)
-#define fprintf(stdout,...) LOGD(__VA_ARGS__)
+#define fprintf(stderr,...) __android_log_print(ANDROID_LOG_ERROR, LOGCAT_TAG, __VA_ARGS__)
+#define fprintf(stdout,...) __android_log_print(ANDROID_LOG_DEBUG, LOGCAT_TAG, __VA_ARGS__)
 
 
 

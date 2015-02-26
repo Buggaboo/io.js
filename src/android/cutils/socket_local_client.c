@@ -133,7 +133,7 @@ int socket_local_client_connect(int fd, const char *name, int namespaceId,
     int err;
 
     err = socket_make_sockaddr_un(name, namespaceId, &addr, &alen);
-    LOGD("uv_pipe_connect::fd:%d, saddr.sun_path:%s, sizeof saddr:%d", err, addr.sun_path, alen);
+    fprintf("uv_pipe_connect::fd:%d, saddr.sun_path:%s, sizeof saddr:%d", err, addr.sun_path, alen);
 
     if (err < 0) {
         goto error;
