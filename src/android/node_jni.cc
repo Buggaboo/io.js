@@ -162,7 +162,6 @@ JNIEXPORT jint JNICALL Java_nl_sison_android_nodejs_repl_NodeJNI_start
 JNIEXPORT jint JNICALL Java_nl_sison_android_nodejs_repl_NodeJNI_createLocalSocket
 (JNIEnv *env, jclass clazz, jstring jname)
 {
-    // TODO figure out if this needs to be manually collected
     const char* name = env->GetStringUTFChars(jname, 0);
     
     int localSocket = socket_local_server_without_listen(name, ANDROID_SOCKET_NAMESPACE_FILESYSTEM, SOCK_STREAM);

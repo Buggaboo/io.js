@@ -135,9 +135,14 @@ int socket_local_server_without_listen(const char *name, int namespace, int type
     int s;
     
     s = socket(AF_LOCAL, type, 0);
+    
+    LOGD("Socket %d", s);
+    
     if (s < 0) return -1;
 
     err = socket_local_server_bind(s, name, namespace);
+    
+    LOGD("Bind %d", err);
 
     if (err < 0) {
         close(s);

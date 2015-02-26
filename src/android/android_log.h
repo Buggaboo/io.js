@@ -16,6 +16,7 @@
 #define  LOGW(...)  __android_log_print(ANDROID_LOG_WARNING, LOG_TAG, __VA_ARGS__)
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFORMATION, LOG_TAG, __VA_ARGS__)
 
+
 #define fprintf(pipe,...) \
     if (pipe == stdout) \
         __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__); \
@@ -23,6 +24,7 @@
         __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__); \
     else \
         fprintf(pipe,__VA_ARGS__)
+
 
 /* I don't think it's necessary to also redefine snprintf or printf */
 
