@@ -61,6 +61,11 @@ extern "C" {
 # include "uv-unix.h"
 #endif
 
+#if defined(__ANDROID__)
+#define HAVE_LINUX_LOCAL_SOCKET_NAMESPACE 1
+#include <cutils/sockets.h>
+#endif /* __ANDROID__ */
+
 /* Expand this list if necessary. */
 #define UV_ERRNO_MAP(XX)                                                      \
   XX(E2BIG, "argument list too long")                                         \

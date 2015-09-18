@@ -150,6 +150,7 @@
         [ 'OS=="android"', {
           'include_dirs': [ 'config/android' ],
           'sources': [ 'config/android/ares_config.h' ],
+          'defines': [ 'DONT_HAVE_GETSERVBYPORT_R', 'HAVE_ARPA_NAMESER_H' ],
         }],
         [ 'OS=="solaris"', {
           'include_dirs': [ 'config/sunos' ],

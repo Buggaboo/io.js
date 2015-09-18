@@ -12,7 +12,8 @@
     'node_use_openssl%': 'true',
     'node_shared_openssl%': 'false',
     'node_v8_options%': '',
-    'node_target_type%': 'executable',
+    'node_target_type%': 'executable', # shared_library
+    'java_home%': '<!(python -c "import os; dir=os.getenv(\'JAVA_HOME\', \'/usr/lib/jvm/java-7-openjdk-amd64\'); assert os.path.exists(os.path.join(dir, \'include/jni.h\')), \'Point \\$JAVA_HOME or the java_home gyp variable to a directory containing include/jni.h!\'; print dir")',
     'library_files': [
       'src/node.js',
       'lib/_debug_agent.js',
@@ -73,6 +74,7 @@
       'lib/internal/socket_list.js',
       'lib/internal/repl.js',
       'lib/internal/util.js',
+      'lib/android.js',
     ],
   },
 
@@ -92,8 +94,10 @@
         'src',
         'tools/msvs/genfiles',
         'deps/uv/src/ares',
+
         '<(SHARED_INTERMEDIATE_DIR)', # for node_natives.h
         'deps/v8' # include/v8_platform.h
+#        , '<(java_home)/include' # JNI deps
       ],
 
       'sources': [
@@ -111,7 +115,7 @@
         'src/node_file.cc',
         'src/node_http_parser.cc',
         'src/node_javascript.cc',
-        'src/node_main.cc',
+#        'src/node_main.cc', # TODO if not shared_library do not add (in conditions)
         'src/node_os.cc',
         'src/node_v8.cc',
         'src/node_stat_watcher.cc',
@@ -174,6 +178,7 @@
         '<@(library_files)',
         # node.gyp is added to the project by default.
         'common.gypi',
+        'src/android/android_wrap.cc' # TODO do this conditionally, also see `android.js`, this provides logcat to nodejs
       ],
 
       'defines': [
@@ -203,6 +208,31 @@
             'NODE_RELEASE_URLBASE="<(node_release_urlbase)"',
           ]
         }],
+#        # android start (TODO finish)
+        [ 'OS=="android"', {
+          # JNI deps
+#          'variables' : { # broken when put here
+#             'java_home%': '<!(python -c "import os; dir=os.getenv(\'JAVA_HOME\', \'/usr/lib/jvm/java-7-openjdk-amd64\'); assert os.path.exists(os.path.join(dir, \'include/jni.h\')), \'Point \\$JAVA_HOME or the java_home gyp variable to a directory containing include/jni.h!\'; print dir")'
+#           },
+          # TODO determine if necessary: for any condition OS == linux, also include android there
+#          'defines!': [
+#            'NODE_PLATFORM="android"', # unnecessary with gcc, dunno about llvm, this breaks the compilation if turned on
+#          ],
+          'include_dirs': [
+              '<(java_home)/include',
+              'src/android',
+           ],
+          'sources': [
+            'src/android/android_log.h',
+            'src/android/node_jni.h',
+            'src/android/node_jni.cc',
+            'src/android/cutils/socket_local_client.c',
+            'src/android/cutils/socket_local_server.c',
+#            'src/android_wrap.cc' # TODO deps problem
+          ]
+        }],
+        # android end
+
         [ 'v8_enable_i18n_support==1', {
           'defines': [ 'NODE_HAVE_I18N_SUPPORT=1' ],
           'dependencies': [
@@ -353,7 +383,6 @@
         [ 'node_shared_libuv=="false"', {
           'dependencies': [ 'deps/uv/uv.gyp:libuv' ],
         }],
-
         [ 'OS=="win"', {
           'sources': [
             'src/res/node.rc',

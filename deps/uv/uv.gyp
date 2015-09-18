@@ -117,7 +117,7 @@
         }, { # Not Windows i.e. POSIX
           'cflags': [
             '-g',
-            '--std=gnu89',
+            '--std=c99',
             '-pedantic',
             '-Wall',
             '-Wextra',
@@ -207,13 +207,18 @@
           },
         }],
         [ 'OS=="android"', {
+          'include_dirs': [
+              '../../src/android',
+          ],
           'sources': [
             'src/unix/linux-core.c',
             'src/unix/linux-inotify.c',
             'src/unix/linux-syscalls.c',
             'src/unix/linux-syscalls.h',
             'src/unix/pthread-fixes.c',
-            'src/unix/android-ifaddrs.c'
+            'src/unix/android-ifaddrs.c',
+#            '../../src/android/cutils/socket_local_client.c',
+#            '../../src/android/cutils/socket_local_server.c',
           ],
           'link_settings': {
             'libraries': [ '-ldl' ],

@@ -12,7 +12,11 @@ export AR=$TOOLCHAIN/bin/arm-linux-androideabi-ar
 export CC=$TOOLCHAIN/bin/arm-linux-androideabi-gcc
 export CXX=$TOOLCHAIN/bin/arm-linux-androideabi-g++
 export LINK=$TOOLCHAIN/bin/arm-linux-androideabi-g++
+export PLATFORM=android # cares
+export OS=android # cares
 
 ./configure \
     --dest-cpu=arm \
     --dest-os=android
+    
+
