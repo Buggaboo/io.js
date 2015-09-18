@@ -107,7 +107,7 @@ static void AndroidThrowErrnoException(
     ThrowException(env, className, buffer);
 }
 
-JNIEXPORT jint JNICALL Java_nl_sison_android_nodejs_repl_NodeJNI_start
+JNIEXPORT jint JNICALL Java_nl_sison_android_iojs_IoJsJni_start
   (JNIEnv *env, jclass clazz, jint jargc, jobjectArray jargv)
 {
     
@@ -159,7 +159,7 @@ JNIEXPORT jint JNICALL Java_nl_sison_android_nodejs_repl_NodeJNI_start
  * So, I reused the API_LEVEL 21 implementation by borrowing cutils.
  * 
  */
-JNIEXPORT jint JNICALL Java_nl_sison_android_nodejs_repl_NodeJNI_createLocalSocket
+JNIEXPORT jint JNICALL Java_nl_sison_android_iojs_IoJsJni_createLocalSocket
 (JNIEnv *env, jclass clazz, jstring jname)
 {
     const char* name = env->GetStringUTFChars(jname, 0);
