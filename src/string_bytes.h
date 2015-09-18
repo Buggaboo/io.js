@@ -152,7 +152,7 @@ class StringBytes {
     return Encode(v8::Isolate::GetCurrent(), buf, buflen, encoding);
   })
 
- private:
+// private:
   static size_t WriteUCS2(char* buf,
                           size_t buflen,
                           size_t nbytes,

@@ -220,6 +220,7 @@
 #          ],
           'include_dirs': [
               '<(java_home)/include',
+              '<(java_home)/include/darwin',
               'src/android',
            ],
           'sources': [
