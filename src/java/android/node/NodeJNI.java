@@ -1,13 +1,13 @@
-package nl.sison.android.iojs;
+package android.node;
 
 
 /**
  * Created by jasm on 1/22/15.
  */
-public class IoJsJni {
+public class NodeJNI {
 
     static {
-        System.loadLibrary("iojs");
+        System.loadLibrary("node");
     }
 
     public static native int start(int argc, String[] argv);
